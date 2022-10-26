@@ -522,7 +522,7 @@ if __name__ == "__main__":
     login_url = "http://pecg.hust.edu.cn/cggl/index1"
     desired_capabilities = DesiredCapabilities.CHROME
     desired_capabilities["pageLoadStrategy"] = "none"
-    browser = webdriver.Chrome(executable_path='chromedriver.exe')
+    browser = webdriver.Chrome(executable_path='./file/chromedriver.exe')
     sec.mainloop()
     browser.quit()  # 退出程序后浏览器关闭
 
