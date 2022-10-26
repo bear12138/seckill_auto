@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-  #防中文乱码
 # !/usr/bin/env python3
-#导入文件的库
+#调用两个验证码py文件的库
 # from pic_save import locate_screen
 from paddleocr import PaddleOCR
 #
