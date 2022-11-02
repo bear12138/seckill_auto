@@ -380,7 +380,7 @@ class Application(Frame):
             messagebox.showinfo(title="预约情况", message="success")
             # browser.find_element(by=By.XPATH, value='out').click()#设置错误跳出try
         except:
-            #若该场被预约才会进入，十秒后在选一般无
+            #若该场被预约才会进入，60秒后在选一般无
             value4 = value2
 
             cicle = 0
