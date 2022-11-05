@@ -335,16 +335,14 @@ class Application(Frame):
             WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.ID, 'starttime')))
             browser.find_element(by=By.ID, value='starttime').click()  #点击时间点框  # 点击时间点框
             browser.find_element(by=By.XPATH, value=value3).click()  # 切换到抢的时间
+            # Cicle=0
+            # while (Cicle<3):
+            WebDriverWait(browser, 600, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value2), u'可预约'))
             # 选择同伴
             browser.find_element(by=By.CSS_SELECTOR,value='body > div.margin_center.width_1000.clearfix.content > div.content_right.fr > div.tab_content > form > table > tbody > tr:nth-child(4) > td > input[type=button]').click()
             # 点击同伴信息
             browser.find_element(by=By.CSS_SELECTOR,value='body > div.stepModal > div.stepModalMain > div > div.datagrid.stepFourMain > table > tbody > tr:nth-child(2)').click()
             # 场地号
-            # Cicle=0
-            # while (Cicle<3):
-
-            # WebDriverWait(browser, 60, 0.1).until(EC.element_to_be_clickable((By.XPATH,value2)))
-            WebDriverWait(browser, 10, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value2), u'可预约'))#10秒即可，场地一般不会卡一分钟
             # WebDriverWait(browser, 60, 0.1).until(EC.text_to_be_present_in_element(By.XPATH,value2),u'已预约')
             browser.find_element(by=By.XPATH,value=value2).click()
             browser.find_element(by=By.CSS_SELECTOR,value='body > div.margin_center.width_1000.clearfix.content > div.content_right.fr > div.tab_content > form > div.star_app > input[type=submit]:nth-child(3)').click()
@@ -380,7 +378,7 @@ class Application(Frame):
             messagebox.showinfo(title="预约情况", message="success")
             # browser.find_element(by=By.XPATH, value='out').click()#设置错误跳出try
         except:
-            #若该场被预约才会进入，10秒后在选一般无
+            #若该场被预约才会进入，十秒后在选一般无
             value4 = value2
 
             cicle = 0
