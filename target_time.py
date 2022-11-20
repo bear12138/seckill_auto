@@ -9,7 +9,6 @@
 # import onnxruntime
 # import torch
 # import torchvision
-
 #网站通用版本脚本，固定抢场，卡顿不影响
 # 延迟仅针对场地处，前面均为有效延迟。场地默认刷新有延迟，其他元素待定
 ##窗口测试
@@ -50,10 +49,12 @@ from slide_verify import onnx_model_main
 import numpy as np
 #
 from verfy_num import *
-
+import pandas as pd
 
 class Application(Frame):
-    global value_list,x_cdi_num,G_cdi_num
+    global value_list,x_cdi_num,G_cdi_num,period_start
+
+
     value_list = {'光谷体育馆': "/html/body/div[2]/div/ul/li[1]/div[1]/div[2]/span/a",
                   '西边体育馆': "/html/body/div[2]/div/ul/li[6]/div[1]/div[2]/span/a",
                   '早8-10': '//*[@id="starttime"]/option[1]','早10-12': '//*[@id="starttime"]/option[2]','午12-14': '//*[@id="starttime"]/option[3]',
@@ -93,7 +94,7 @@ class Application(Frame):
 
     def createWidget(self):
         ###登录界面设置
-        global  photo1,list1, list2, list3, photo2, bg2
+        global  photo1,list1, list2, list3, photo2, bg2,list_start,list_end
         self.bg = tk.Canvas(sec, width=800, height=400, bd=0, highlightthickness=0)
         img = Image.open('file/背景图.gif')
         photo1 = ImageTk.PhotoImage(img)
@@ -115,7 +116,7 @@ class Application(Frame):
         entry2 = StringVar()
         self.entry2 = Entry(sec, textvariable=entry2, show='*')
         self.entry2.place(relx=0.2, rely=0.42, relwidth=0.4, relheight=0.1)
-        self.toggle_btn = tk.Button(sec, text='显示密码', font=('宋体', 10), command=self.pd, bg="Hotpink")
+        self.toggle_btn = tk.Button(sec, text='显示密码', font=('宋体', 10), command=self.pd_show, bg="Hotpink")
         self.toggle_btn.place(relx=0.65, rely=0.42, relwidth=0.2, relheight=0.1)
 
 
@@ -173,7 +174,20 @@ class Application(Frame):
         Label(sec, text="场地号", font=("宋体", 12), borderwidth=0.01, relief="groove", bg="Hotpink").place(relx=0.38,rely=0.03,relwidth=0.24,relheight=0.05)
         Label(sec, text="时间段", font=("宋体", 12), borderwidth=0.01, relief="groove", bg="Hotpink").place(relx=0.69,rely=0.03,relwidth=0.24,relheight=0.05)
         self.go = Button(sec, text='预约', command=self.sec_kill, font=("宋体", 12)).place(relx=0.4, rely=0.8,relwidth=0.2,relheight=0.1)  # 创建按钮
-
+        #开始时间
+        period_start = self.get_date_list('07:55:00', '08:10:00', 'Min')
+        time_start=tk.StringVar()
+        list_start = ttk.Combobox(sec, textvariable=time_start, state="readonly", width=10)
+        list_start['value']=period_start
+        list_start.place(relx=0.2, rely=0.65, relwidth=0.2, relheight=0.05)
+        #结束时间
+        period_end = self.get_date_list('18:00:00', '23:30:00', 'Min')
+        time_end=tk.StringVar()
+        list_end = ttk.Combobox(sec, textvariable=time_end, state="readonly", width=10)
+        list_end['value']=period_end
+        list_end.place(relx=0.6, rely=0.65, relwidth=0.2, relheight=0.05)
+        Label(sec, text="开始时间", font=("宋体", 12), borderwidth=0.01, relief="groove", bg="Hotpink").place(relx=0.2,rely=0.6,relwidth=0.2,relheight=0.05)
+        Label(sec, text="结束时间", font=("宋体", 12), borderwidth=0.01, relief="groove", bg="Hotpink").place(relx=0.6,rely=0.6,relwidth=0.2,relheight=0.05)
 
     def sec_kill(self):
 
@@ -183,7 +197,9 @@ class Application(Frame):
             # 当前时间（以时间区间的方式表示）
             now_time = Interval(now_localtime, now_localtime)
             # print(now_time)
-            time_interval = Interval("07:59:00", "18:15:00")
+            start_time=list_start.get()
+            end_time=list_end.get()
+            time_interval = Interval(start_time, end_time)
 
             if now_time in time_interval:
                 print("success")
@@ -328,7 +344,6 @@ class Application(Frame):
                     WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
                     browser.find_element(by=By.CLASS_NAME, value="next_day").click()  # 切换明天，两个路径一样
                     a = 0
-
             # 请求成功后
             WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
             browser.find_element(by=By.CLASS_NAME,value='next_day').click()  # 切换后天，两个路径一样
@@ -446,11 +461,8 @@ class Application(Frame):
 
                     cicle = 15
 
-
-
-
-
-    def pd(self):
+    # 显示密码
+    def pd_show(self):
         if self.entry2.cget('show') == '':
             self.entry2.config(show='*')
             self.toggle_btn.config(text='显示密码')
@@ -479,6 +491,10 @@ class Application(Frame):
 
         with  open('file/acc_pd.txt', 'w') as data_file:
             data_file.write(','.join((name, pwd)))
+    def get_date_list(self,begin_date, end_date, freq):
+        date_list = [x.strftime('%H:%M:00') for x in list(pd.date_range(start=begin_date, end=end_date, freq=freq))]
+        return date_list
+
 
     #调用无效，只能直接用
     # def auto_in(self):
