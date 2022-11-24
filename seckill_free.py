@@ -53,8 +53,8 @@ from verfy_num import *
 
 class Application(Frame):
     global value_list,x_cdi_num,G_cdi_num
-    value_list = {'光谷体育馆': "/html/body/div[2]/div/ul/li[1]/div[1]/div[2]/span/a",
-                  '西边体育馆': "/html/body/div[2]/div/ul/li[6]/div[1]/div[2]/span/a",
+    value_list = {'光谷体育馆': "/html/body/div[2]/div[1]/ul/li[2]/div[1]/div[2]",
+                  '西边体育馆': "/html/body/div[2]/div[1]/ul/li[7]/div[1]/div[2]",
                   '早8-10': '//*[@id="starttime"]/option[1]','早10-12': '//*[@id="starttime"]/option[2]','午12-14': '//*[@id="starttime"]/option[3]',
                   '午2-4':'//*[@id="starttime"]/option[4]','午4-6':'//*[@id="starttime"]/option[5]',
                   '晚6-8': '//*[@id="starttime"]/option[6]','晚8-10': '//*[@id="starttime"]/option[7]',
@@ -331,29 +331,30 @@ class Application(Frame):
             WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
             browser.find_element(by=By.CLASS_NAME,value='next_day').click()  # 切换后天，两个路径一样
             WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.ID, 'starttime')))
-            browser.find_element(by=By.ID, value='starttime').click()  #点击时间点框  # 点击时间点框
+            browser.find_element(by=By.ID, value='starttime').click()  #点击时间点框
             browser.find_element(by=By.XPATH, value=value3).click()  # 切换到抢的时间
+            # WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'body > div.margin_center.width_1000.clearfix.content > div.content_right.fr > div.tab_content > form > table > tbody > tr:nth-child(4) > td > input[type=button]')))
+            # 场地号
             judge=True
             while (judge):
                 try:
                     WebDriverWait(browser, 0.2, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value2), u'已预约'))
                     # WebDriverWait(browser, 60, 0.1).until(EC.element_to_be_clickable((By.XPATH,value2)))
-                     # s所有确定按钮
                     judge=False
                 except:
-                    WebDriverWait(browser, 600, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value2), u'可预约'))
-                    # WebDriverWait(browser, 60, 0.1).until(EC.text_to_be_present_in_element(By.XPATH,value2),u'已预约')
                     # 选择同伴
                     browser.find_element(by=By.CSS_SELECTOR,value='body > div.margin_center.width_1000.clearfix.content > div.content_right.fr > div.tab_content > form > table > tbody > tr:nth-child(4) > td > input[type=button]').click()
                     # 点击同伴信息
                     browser.find_element(by=By.CSS_SELECTOR,value='body > div.stepModal > div.stepModalMain > div > div.datagrid.stepFourMain > table > tbody > tr:nth-child(2)').click()
-                    # 场地号
+                    WebDriverWait(browser, 600, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value2), u'可预约'))
                     browser.find_element(by=By.XPATH, value=value2).click()
                     browser.find_element(by=By.CSS_SELECTOR,value='body > div.margin_center.width_1000.clearfix.content > div.content_right.fr > div.tab_content > form > div.star_app > input[type=submit]:nth-child(3)').click()
+                    # browser.find_element(by=By.CSS_SELECTOR,value='body > div.margin_center.width_1000.clearfix.content > div.content_right.fr > div.tab_content > form > div.star_app > input[type=submit]:nth-child(3)').click()
+                    # messagebox.showinfo("场地预约", "场地预约成功")
                     #滑动验证码
                     while(True):
                         try:
-                            WebDriverWait(browser, 10, 0.1).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="captcha"]/canvas[1]')))
+                            WebDriverWait(browser, 60, 0.1).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="captcha"]/canvas[1]')))
                             browser.find_element(by=By.XPATH, value='//*[@id="captcha"]/canvas[1]').screenshot('./file/slide.png')
                             onnx_model_main('./file/slide.png')
                             with open('file/slide.txt', 'r') as data_file:
@@ -410,7 +411,6 @@ class Application(Frame):
                         value4 = random.choice(G_cdi_num)
                     WebDriverWait(browser, 0.2, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value4), u'已预约'))
                     cicle += 1
-
                 except:
                     WebDriverWait(browser, 0.2, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value4), u'可预约'))
                     browser.find_element(by=By.XPATH, value=value4).click()  # 场地号
@@ -429,9 +429,6 @@ class Application(Frame):
                             # 参考`drag_and_drop_by_offset(eleDrag,offsetX-10,0)`的实现，使用move方法
                             # simulateDragX(browser,slide_instance,result_slide)
                             self.slide_simple(slide_instance,result_slide)
-                            # time.sleep(0.2)
-                            #
-                            # browser.find_element(by=By.XPATH, value='//*[@id="submitbtn"]').click()
                             messagebox.showinfo(title="预约情况",message="未知场地")
                             # browser.find_element(by=By.XPATH, value='/html/body/div[2]/div[2]/form/div/div[4]/input[1]').click()#取消
                             # browser.find_element(by=By.XPATH, value='??').click()

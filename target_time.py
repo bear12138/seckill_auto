@@ -9,6 +9,7 @@
 # import onnxruntime
 # import torch
 # import torchvision
+
 #网站通用版本脚本，固定抢场，卡顿不影响
 # 延迟仅针对场地处，前面均为有效延迟。场地默认刷新有延迟，其他元素待定
 ##窗口测试
@@ -55,8 +56,9 @@ class Application(Frame):
     global value_list,x_cdi_num,G_cdi_num,period_start
 
 
-    value_list = {'光谷体育馆': "/html/body/div[2]/div/ul/li[1]/div[1]/div[2]/span/a",
-                  '西边体育馆': "/html/body/div[2]/div/ul/li[6]/div[1]/div[2]/span/a",
+
+    value_list = {'光谷体育馆': "/html/body/div[2]/div[1]/ul/li[2]/div[1]/div[2]",
+                  '西边体育馆': "/html/body/div[2]/div[1]/ul/li[7]/div[1]/div[2]",
                   '早8-10': '//*[@id="starttime"]/option[1]','早10-12': '//*[@id="starttime"]/option[2]','午12-14': '//*[@id="starttime"]/option[3]',
                   '午2-4':'//*[@id="starttime"]/option[4]','午4-6':'//*[@id="starttime"]/option[5]',
                   '晚6-8': '//*[@id="starttime"]/option[6]','晚8-10': '//*[@id="starttime"]/option[7]',
@@ -200,6 +202,7 @@ class Application(Frame):
             start_time=list_start.get()
             end_time=list_end.get()
             time_interval = Interval(start_time, end_time)
+            print(end_time)
 
             if now_time in time_interval:
                 print("success")
@@ -251,6 +254,7 @@ class Application(Frame):
                 # time.sleep(0.5)
 
                 browser.find_element(by=By.ID, value='index_login_btn').click()  # 点击登录按钮
+                WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > ul > li:nth-child(2) > a')))
                 browser.find_element(by=By.CSS_SELECTOR, value='#main > ul > li:nth-child(2) > a').click()  # 场地预约栏
 
                 break
@@ -344,6 +348,7 @@ class Application(Frame):
                     WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
                     browser.find_element(by=By.CLASS_NAME, value="next_day").click()  # 切换明天，两个路径一样
                     a = 0
+
             # 请求成功后
             WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
             browser.find_element(by=By.CLASS_NAME,value='next_day').click()  # 切换后天，两个路径一样

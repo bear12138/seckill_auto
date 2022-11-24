@@ -54,8 +54,8 @@ from verfy_num import *
 
 class Application(Frame):
     global value_list,x_cdi_num,G_cdi_num
-    value_list = {'光谷体育馆': "/html/body/div[2]/div/ul/li[1]/div[1]/div[2]/span/a",
-                  '西边体育馆': "/html/body/div[2]/div/ul/li[6]/div[1]/div[2]/span/a",
+    value_list = {'光谷体育馆': "/html/body/div[2]/div[1]/ul/li[2]/div[1]/div[2]",
+                  '西边体育馆': "/html/body/div[2]/div[1]/ul/li[7]/div[1]/div[2]",
                   '早8-10': '//*[@id="starttime"]/option[1]','早10-12': '//*[@id="starttime"]/option[2]','午12-14': '//*[@id="starttime"]/option[3]',
                   '午2-4':'//*[@id="starttime"]/option[4]','午4-6':'//*[@id="starttime"]/option[5]',
                   '晚6-8': '//*[@id="starttime"]/option[6]','晚8-10': '//*[@id="starttime"]/option[7]',
@@ -325,19 +325,19 @@ class Application(Frame):
                     a = 1
                 except:
                     # time.sleep(num)
-                    WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
+                    WebDriverWait(browser, 1200, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
                     browser.find_element(by=By.CLASS_NAME, value="next_day").click()  # 切换明天，两个路径一样
                     a = 0
 
             # 请求成功后
-            WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
+            WebDriverWait(browser, 1200, 0.1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'next_day')))
             browser.find_element(by=By.CLASS_NAME,value='next_day').click()  # 切换后天，两个路径一样
-            WebDriverWait(browser, 600, 0.1).until(EC.element_to_be_clickable((By.ID, 'starttime')))
+            WebDriverWait(browser, 1200, 0.1).until(EC.element_to_be_clickable((By.ID, 'starttime')))
             browser.find_element(by=By.ID, value='starttime').click()  #点击时间点框  # 点击时间点框
             browser.find_element(by=By.XPATH, value=value3).click()  # 切换到抢的时间
             # Cicle=0
             # while (Cicle<3):
-            WebDriverWait(browser, 600, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value2), u'可预约'))
+            WebDriverWait(browser, 1200, 0.1).until(EC.text_to_be_present_in_element((By.XPATH, value2), u'可预约'))
             # 选择同伴
             browser.find_element(by=By.CSS_SELECTOR,value='body > div.margin_center.width_1000.clearfix.content > div.content_right.fr > div.tab_content > form > table > tbody > tr:nth-child(4) > td > input[type=button]').click()
             # 点击同伴信息
@@ -446,10 +446,7 @@ class Application(Frame):
 
                     cicle = 15
 
-
-
-
-
+    # 显示密码
     def pd(self):
         if self.entry2.cget('show') == '':
             self.entry2.config(show='*')
