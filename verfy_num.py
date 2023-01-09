@@ -1,8 +1,7 @@
-# import cv2
-# import numpy
+
 import numpy as np
 # from pic_save import locate_screen
-from paddleocr import PaddleOCR
+# from paddleocr import PaddleOCR
 # import base64
 import cv2
 def writeImg(self):
@@ -57,7 +56,8 @@ def writeImg(self):
 # writeImg()
 
 
-
+##数字识别，精度不错，库较大
+"""
 def verify_result(self):
     ocr = PaddleOCR()  # need to run only once to download and load model into memory
     img_path = './file/YZM_NUM.png'
@@ -65,5 +65,7 @@ def verify_result(self):
     for line in result:
         # print(line)
         print(line[0])
+"""
+
 
 
